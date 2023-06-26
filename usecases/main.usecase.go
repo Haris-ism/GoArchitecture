@@ -3,20 +3,25 @@ package usecase
 import (
 	"tes/models"
 
+	postgre "tes/databases/postgresql"
 	redis_db "tes/databases/redis"
 )
 
 type (
-	usecase struct{
-		redis redis_db.RedisInterface
+	usecase struct {
+		postgre postgre.PostgreInterface
+		redis   redis_db.RedisInterface
 	}
-	UsecaseInterface interface{
-		WriteRedis(models.RedisReq)error
+	UsecaseInterface interface {
+		WriteRedis(models.RedisReq) error
+		ReadRedis(req models.RedisReq) (string, error)
+		InsertDB(req models.ItemList) error
 	}
 )
 
-func InitUsecase(redis redis_db.RedisInterface) UsecaseInterface{
+func InitUsecase(postgre postgre.PostgreInterface, redis redis_db.RedisInterface) UsecaseInterface {
 	return &usecase{
-		redis:redis,
+		postgre: postgre,
+		redis:   redis,
 	}
 }
