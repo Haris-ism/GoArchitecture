@@ -2,6 +2,7 @@ package router
 
 import (
 	controller "tes/controllers"
+	"tes/middleware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -9,6 +10,7 @@ import (
 
 func MainRouter(con controller.ControllerInterface) {
 	r := gin.Default()
+	r.Use(middleware.Cors)
 	v1 := r.Group("v1")
 	v1.GET("/ping", con.Ping)
 	v1.POST("/writeredis", con.WriteRedis)
